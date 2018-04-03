@@ -1,3 +1,5 @@
+extern crate hostname;
+
 use std::io::{self, Read, Write};
 use std::net::{TcpListener, TcpStream, ToSocketAddrs};
 
@@ -18,6 +20,14 @@ impl Group {
 
     pub fn new_client<A: ToSocketAddrs>(addr: A) -> io::Result<Self> {
         Ok(Group::Client(TcpStream::connect(addr)?))
+    }
+
+    pub fn from_hostname(leader: &str, port: u16, num_clients: usize) -> io::Result<Self> {
+        if leader == hostname::get_hostname().unwrap() {
+            Self::new_server(num_clients, ("0.0.0.0", port))
+        } else {
+            Self::new_client((leader, port))
+        }
     }
 
     pub fn barrier(&mut self) {

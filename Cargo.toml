@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Jonathan Behrens <fintelia@gmail.com>"]
 
 [dependencies]
+hostname = "0.1.4"
 
 [dev-dependencies]
 clap = "2.31.2"
