@@ -1,0 +1,9 @@
+[package]
+name = "lockstep"
+version = "0.1.0"
+authors = ["Jonathan Behrens <fintelia@gmail.com>"]
+
+[dependencies]
+
+[dev-dependencies]
+clap = "2.31.2"
