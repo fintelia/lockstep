@@ -22,9 +22,10 @@ impl Group {
         Ok(Group::Client(TcpStream::connect(addr)?))
     }
 
-    pub fn from_hostname(leader: &str, port: u16, num_clients: usize) -> io::Result<Self> {
+    pub fn from_hostname(leader: &str, port: u16, num_peers: usize) -> io::Result<Self> {
         if leader == hostname::get_hostname().unwrap() {
-            Self::new_server(num_clients, ("0.0.0.0", port))
+            assert!(num_peers >= 1);
+            Self::new_server(num_peers - 1, ("0.0.0.0", port))
         } else {
             Self::new_client((leader, port))
         }
