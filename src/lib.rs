@@ -2,6 +2,8 @@ extern crate hostname;
 
 use std::io::{self, Read, Write};
 use std::net::{TcpListener, TcpStream, ToSocketAddrs};
+use std::thread;
+use std::time::Duration;
 
 pub enum Group {
     Server(Vec<TcpStream>),
@@ -19,6 +21,12 @@ impl Group {
     }
 
     pub fn new_client<A: ToSocketAddrs>(addr: A) -> io::Result<Self> {
+        for _ in 0..5 {
+            match TcpStream::connect(&addr) {
+                Ok(stream) => return Ok(Group::Client(stream)),
+                Err(_) => thread::sleep(Duration::from_millis(50)),
+            }
+        }
         Ok(Group::Client(TcpStream::connect(addr)?))
     }
 
